@@ -1,0 +1,136 @@
+class my_Stack
+{
+private:
+    int my_top;
+    int my_size;
+    char *my_buffer;
+public:
+    my_Stack(int size_);    //设定栈长度
+    ~my_Stack();            //释放栈空间
+    int my_length();        //返回栈长度
+    bool my_empty();        //判断栈是否为空
+    bool my_full();         //判断栈是否为满
+    void my_clear();        //清空栈
+    void my_push(char ch);  //入栈
+    char my_pop();          //出栈
+    void my_print();
+};
+
+my_Stack::my_Stack(int size_)          //设定栈长度
+{
+    my_size=size_;
+    my_top=0;
+    my_buffer=new char[size_];
+}
+my_Stack::~my_Stack()                 //释放栈空间
+{
+    delete [] my_buffer;
+}
+int my_Stack::my_length()   //返回栈长度
+{
+    return my_top;
+}
+bool my_Stack::my_empty()   //判断栈是否为空
+{
+    if(0==my_top)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+bool my_Stack::my_full()    //判断栈是否为满
+{
+    if(my_top==my_size)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+void my_Stack::my_clear()   //清空栈
+{
+    my_top=0;
+}
+void my_Stack::my_push(char ch)    //入栈
+{
+    if(!my_full())
+    {
+        my_buffer[my_top]=ch;
+        my_top++;
+    }
+    else
+    {
+        cout << "The stack is full!" <<endl;
+        throw 1;
+    }
+}
+char my_Stack::my_pop()      //出栈
+{
+    if(!my_empty())
+    {
+        my_top--;
+        return my_buffer[my_top];
+    }
+    else
+    {
+        cout << "The Stack is empty!" <<endl;
+        throw 1;
+    }
+}
+void my_Stack::my_print()
+{
+    for (int i=0;i<my_top;i++)
+    {
+        cout << my_buffer[i] << " ";
+    }
+}
+/*void my_Stack::my_print()
+{
+    for(int i=my_top-1;i>=0;i--)
+    {
+        cout << my_buffer[i] << " ";
+    }
+}*/
+int main()
+{
+    my_Stack *stack=new my_Stack(5);
+
+    stack->my_push('h');
+    stack->my_push('e');
+    stack->my_push('l');
+    stack->my_push('l');
+    stack->my_push('o');
+    //stack->my_push('!');
+
+    //stack->my_clear();
+
+    cout << stack->my_pop() << " ";
+    //cout << stack->my_pop() << " ";
+    //cout << stack->my_pop() << " ";
+    //cout << stack->my_pop() << " ";
+    //cout << stack->my_pop() << " ";
+    //cout << stack->my_pop() << " ";
+
+    stack->my_print();
+
+    if(stack->my_empty())
+    {
+        cout << "The stack is empty!" <<endl;
+    }
+
+    if(stack->my_full())
+    {
+        cout << "The stack is full!" <<endl;
+    }
+
+    cout << stack->my_length();
+
+    delete stack;
+
+    return 0;
+}
