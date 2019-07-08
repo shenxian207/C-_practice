@@ -1,0 +1,246 @@
+#include <iostream>
+using namespace std;
+
+class Rational
+{
+public:
+    int iUp;
+    int iDown;
+    void Reduce();
+    int Gcd(int l, int r);
+    Rational(int iUp_=0,int iDown_=0);
+    Rational operator-();
+    Rational &operator=(Rational r);
+    friend Rational &operator++(Rational &ra);
+    Rational operator--();
+    friend Rational &operator++(Rational &ra,int);
+    Rational operator--(int);
+
+    friend Rational operator +(const Rational &a,const Rational &b);   //全局函数重载
+    Rational operator -(const Rational &a);                            //成员函数重载
+    friend Rational operator *(const Rational &a,const Rational &b);   //全局函数重载
+    Rational operator /(const Rational &a);                            //成员函数重载
+
+    void operator <(const Rational &a);
+    void operator >(const Rational &a);
+    void operator <=(const Rational &a);
+    void operator >=(const Rational &a);
+
+    friend ostream &operator <<(ostream &os,const Rational &ra);
+    friend istream &operator >>(istream &is,Rational &ra);
+
+    void output();
+    void change_num()
+    {
+        if(iDown<0)
+        {
+            iUp=-iUp;
+            iDown=-iDown;
+        }
+    }
+};
+
+void Rational::Reduce()
+{
+    int gcd;
+    gcd=Gcd(iUp,iDown);
+    iUp=iUp/gcd;
+    iDown=iDown/gcd;
+}
+int Rational::Gcd(int l, int r)
+{
+    int temp;
+    int m=l,n=r;
+    if(l<0)
+    {
+        m=-m;
+    }
+    if(r<0)
+    {
+        n=-n;
+    }
+    if(n>m)
+    {
+        temp=n;
+        n=m;
+        m=temp;
+    }
+    while(n!=0)
+    {
+        temp=n;
+        n=m%n;
+        m=temp;
+    }
+    return m;
+}
+Rational::Rational(int iUp_,int iDown_)
+{
+    iUp= iUp_;
+    iDown= iDown_;
+}
+
+Rational Rational::operator-()
+{
+    iUp=-iUp;
+    iDown=iDown;
+    return Rational(iUp,iDown);
+}
+Rational &Rational::operator=(Rational r)
+{
+    if(r.iDown<0)
+    {
+        iUp= (-r.iUp);
+        iDown= (-r.iDown);
+    }
+    else
+    {
+        iUp=r.iUp;
+        iDown=r.iDown;
+    }
+    return *this;
+}
+
+Rational& operator++(Rational &ra)     //全局函数重载
+{
+    ra.iUp=ra.iUp+ra.iDown;
+    ra.iDown=ra.iDown;
+    return ra;
+}
+Rational Rational::operator--()        //成员函数重载
+{
+    iUp=iUp-iDown;
+    iDown=iDown;
+    return Rational(iUp,iDown);
+}
+Rational& operator++(Rational &ra,int)   //全局函数重载
+{
+    return ra;
+}
+Rational Rational::operator--(int)       //成员函数重载
+{
+    Rational temp(iUp,iDown);
+    iUp=iUp+iDown;
+    iDown=iDown;
+    return temp;
+}
+
+Rational operator +(const Rational &a,const Rational &b)   //全局函数重载
+{
+    Rational ra;
+    ra.iUp=(a.iUp*b.iDown)+(a.iDown*b.iUp);
+    ra.iDown=(a.iDown*b.iDown);
+    return ra;
+}
+Rational Rational::operator -(const Rational &a)           //成员函数重载
+{
+    Rational ra;
+    ra.iUp=(this->iUp*a.iDown)-(this->iDown*a.iUp);
+    ra.iDown=(a.iDown*this->iDown);
+    return ra;
+}
+Rational operator *(const Rational &a,const Rational &b)   //全局函数重载
+{
+    Rational ra;
+    ra.iUp=(a.iUp*b.iUp);
+    ra.iDown=a.iDown*b.iDown;
+    return ra;
+}
+Rational Rational::operator /(const Rational &a)           //成员函数重载
+{
+    Rational ra;
+    ra.iUp=this->iUp*a.iDown;
+    ra.iDown=this->iDown*a.iUp;
+    return ra;
+}
+
+void Rational::operator <(const Rational &a)
+{
+    if((this->iUp*a.iDown)<(this->iDown*a.iUp))
+    {
+        cout << "true" <<endl;
+    }
+    else
+    {
+        cout << "false" <<endl;
+    }
+}
+void Rational::operator >(const Rational &a)
+{
+    if((this->iUp*a.iDown)>(this->iDown*a.iUp))
+    {
+        cout << "true" <<endl;
+    }
+    else
+    {
+        cout << "false" <<endl;
+    }
+}
+void Rational::operator <=(const Rational &a)
+{
+    if((this->iUp*a.iDown)<=(this->iDown*a.iUp))
+    {
+        cout << "true" <<endl;
+    }
+    else
+    {
+        cout << "false" <<endl;
+    }
+}
+void Rational::operator >=(const Rational &a)
+{
+    if((this->iUp*a.iDown)>=(this->iDown*a.iUp))
+    {
+        cout << "true" <<endl;
+    }
+    else
+    {
+        cout << "false" <<endl;
+    }
+}
+
+ostream &operator <<(ostream &os,const Rational &ra)
+{
+    if(ra.iDown==1)
+    {
+        cout << ra.iUp << endl;
+    }
+    else
+    {
+        cout << ra.iUp << "/" << ra.iDown <<endl;
+    }
+    return os;
+}
+istream &operator >>(istream &is,Rational &ra)
+{
+    cin >> ra.iUp >> ra.iDown;
+    return is;
+}
+
+int main()
+{
+    Rational a,b;
+    cin >> a >> b;
+
+    Rational a_0,a_1,a_2,a_3,a_4;
+
+    a_1=a+b;a_1.Reduce();cout << "a+b: ";cout << a_1;
+    a_2=a-b;a_2.Reduce();cout << "a-b: ";cout << a_2;
+    a_3=a*b;a_3.Reduce();cout << "a*b: ";cout << a_3;
+    a_4=a/b;a_4.Reduce();cout << "a/b: ";cout << a_4;
+    a_0=a;a_0.Reduce();-a_0;cout << "-a: ";cout << a_0;
+
+    a.change_num();
+    b.change_num();
+    ++a;cout << "++a: ";cout << a;
+    --a;cout << "--a: ";cout << a;
+    a++;cout << "a++: ";cout << a;
+    a--;cout << "a--: ";cout << a;
+    --a;
+
+    cout << "a<b: "; a<b;
+    cout << "a<=b: ";a<=b;
+    cout << "a>b: "; a>b;
+    cout << "a>=b: ";a>=b;
+
+    return 0;
+}
