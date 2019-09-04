@@ -1,0 +1,132 @@
+#include <iostream>
+using namespace std;
+
+class my_stack
+{
+private:
+    int top;
+    int size;
+    int *my_buffer;
+public:
+    my_stack(int size_);
+    ~my_stack();
+    int length();
+    bool full();
+    bool empty();
+    void clear();
+    void push(int num);
+    int pop();
+    void print();
+};
+
+my_stack::my_stack(int size_)
+{
+    size=size_;
+    top=0;
+    my_buffer=new int[size_];
+}
+
+my_stack::~my_stack()
+{
+    delete []my_buffer;
+}
+
+int my_stack::length()
+{
+    return top;
+}
+
+bool my_stack::full()
+{
+    if(size==top)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+bool my_stack::empty()
+{
+    if(0==top)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+void my_stack::clear()
+{
+    top=0;
+}
+
+void my_stack::push(int num)
+{
+    if(full())
+    {
+        cout << "The stack is full!" <<endl;
+    }
+    else
+    {
+        my_buffer[top]=num;
+        top++;
+    }
+}
+int my_stack::pop()
+{
+    if(empty())
+    {
+        cout << "The stack is empty!" <<endl;
+        throw 1;
+    }
+    else
+    {
+        top--;
+        return my_buffer[top];
+    }
+}
+
+void my_stack::print()
+{
+    for(int i=0;i<top;i++)
+    {
+        cout << my_buffer[i] <<" ";
+    }
+}
+
+int main()                     //仅能够计算10以内的数字的加减乘除
+{
+    char ch;
+    int num,num1,num2;
+    my_stack *stack=new my_stack(10);
+
+    cin >> ch;
+
+    while(ch!='0')
+    {
+        if(48<=ch&&ch<=57)
+        {
+            stack->push(ch-48);     //将char类型转换为int类型,压入栈中
+        }
+        else
+        {
+            switch(ch)
+            {
+                case '+':num=stack->pop()+stack->pop();break;
+                case '-':num1=stack->pop();num2=stack->pop();num=num2-num1;break;
+                case '*':num=stack->pop()*stack->pop();break;
+                case '/':num1=stack->pop();num2=stack->pop();num=num2/num1;break;
+            }
+            stack->push(num);
+        }
+        cin >> ch;
+    }
+
+    cout << stack->pop();
+
+    delete stack;
+    return 0;
+}
