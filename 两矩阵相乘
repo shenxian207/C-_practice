@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int m=3;
+    int n=2;
+    int x=3;
+    int a[m][x]={1,1,1,1,1,1,1,1,1};
+    int b[x][n]={1,1,1,1,1,1};
+    int c[m][n]={0};
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)         //i,j代表得到矩阵C的大小，c[i][j]
+        {
+            for(int k=0;k<x;k++)     //k代表每得到矩阵C中的一个元素所做乘法的次数
+            {
+                c[i][j]=a[i][k]*b[k][j]+c[i][j];
+            }
+        }
+    }
+    for(int i=0;i<m;i++)         //按矩阵的格式输出c
+    {
+        for(int j=0;j<n;j++)
+        {
+            cout << c[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
